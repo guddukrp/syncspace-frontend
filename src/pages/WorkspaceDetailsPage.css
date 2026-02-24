@@ -1,0 +1,66 @@
+.workspace-details-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.workspace-details-page header h1 {
+  margin: 0;
+}
+
+.workspace-details-page header p {
+  margin: 0.25rem 0 0;
+  color: #475569;
+}
+
+.card {
+  background: white;
+  border: 1px solid #dbe3ef;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.inline-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.6rem;
+}
+
+.inline-form input {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+
+.inline-form button {
+  border: 0;
+  border-radius: 8px;
+  background: #1d4ed8;
+  color: white;
+  padding: 0 1rem;
+}
+
+.item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.8rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.item-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.5rem;
+}
+
+.error {
+  color: #b91c1c;
+}
+
+@media (max-width: 760px) {
+  .inline-form {
+    grid-template-columns: 1fr;
+  }
+}

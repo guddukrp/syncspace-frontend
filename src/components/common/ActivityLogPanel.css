@@ -1,0 +1,27 @@
+.activity-log-panel {
+  background: white;
+  border: 1px solid #dbe3ef;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.activity-log-panel ul {
+  margin: 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.activity-log-panel li {
+  border-left: 2px solid #93c5fd;
+  padding-left: 0.75rem;
+}
+
+.activity-log-panel .action {
+  font-weight: 700;
+  margin: 0 0 0.2rem;
+}
+
+.activity-log-panel .empty {
+  color: #64748b;
+}

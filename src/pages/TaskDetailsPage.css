@@ -1,0 +1,43 @@
+.task-details-page {
+  display: grid;
+  gap: 1rem;
+}
+
+.task-details-page h1 {
+  margin: 0;
+}
+
+.card {
+  background: white;
+  border: 1px solid #dbe3ef;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.row button,
+.row input {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+}
+
+.row button {
+  background: white;
+  cursor: pointer;
+}
+
+.row button.active {
+  background: #1d4ed8;
+  color: white;
+  border-color: #1d4ed8;
+}
+
+.row input {
+  min-width: 320px;
+}

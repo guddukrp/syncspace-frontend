@@ -1,0 +1,22 @@
+.dashboard-page h1 {
+  margin-top: 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.stats-grid article {
+  background: white;
+  border: 1px solid #dbe3ef;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.stats-grid p {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
