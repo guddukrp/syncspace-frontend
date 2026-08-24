@@ -20,5 +20,6 @@ export const QUERY_KEYS = {
   project: 'project',
   tasks: 'tasks',
   task: 'task',
+  workspaceMembers: 'workspaceMembers',
   activityLogs: 'activityLogs',
 };

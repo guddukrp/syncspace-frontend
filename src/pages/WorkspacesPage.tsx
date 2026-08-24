@@ -7,7 +7,6 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 import Modal from '../components/common/Modal';
 import Pagination from '../components/common/Pagination';
 import { APP_ROUTES } from '../constant';
-import { useAuth } from '../hooks/useAuth';
 import { useCreateWorkspace, useDeleteWorkspace, useWorkspaces } from '../hooks/useWorkspaces';
 import { getErrorMessage } from '../utils/error';
 import { sanitizePage } from '../utils/pagination';
@@ -20,8 +19,6 @@ const WorkspacesPage = () => {
   const [page, setPage] = useState(0);
   const [size] = useState(10);
   const [isModalOpen, setModalOpen] = useState(false);
-
-  const { user } = useAuth();
 
   const workspacesQuery = useWorkspaces(page, size);
   const createWorkspace = useCreateWorkspace();
@@ -37,10 +34,7 @@ const WorkspacesPage = () => {
   });
 
   const submitWorkspace = async (values: WorkspaceFormValues) => {
-    await createWorkspace.mutateAsync({
-      ...values,
-      ownerId: user?.id || '',
-    });
+    await createWorkspace.mutateAsync(values);
     reset();
     setModalOpen(false);
   };

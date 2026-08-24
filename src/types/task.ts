@@ -3,6 +3,7 @@ export type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'DONE' | 'BLOCKED';
 export interface Task {
   id: string;
   projectId: string;
+  workspaceId: string;
   title: string;
   description?: string;
   status: TaskStatus;

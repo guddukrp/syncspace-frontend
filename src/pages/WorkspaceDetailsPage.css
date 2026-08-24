@@ -31,6 +31,13 @@
   padding: 0.5rem;
 }
 
+.inline-form select {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.5rem;
+  background: white;
+}
+
 .inline-form button {
   border: 0;
   border-radius: 8px;
@@ -59,8 +66,74 @@
   color: #b91c1c;
 }
 
+.member-form {
+  margin-bottom: 1rem;
+}
+
+.member-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.member-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.65rem;
+}
+
+.member-list li div:first-child {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.member-list span {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.member-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.member-actions select {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.4rem 0.5rem;
+  background: white;
+}
+
+.delete-btn {
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fff1f2;
+  color: #b91c1c;
+  padding: 0.4rem 0.7rem;
+}
+
+.role-pill {
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 0.35rem 0.65rem;
+}
+
 @media (max-width: 760px) {
   .inline-form {
     grid-template-columns: 1fr;
+  }
+
+  .member-list li,
+  .member-actions {
+    align-items: stretch;
+    flex-direction: column;
   }
 }
