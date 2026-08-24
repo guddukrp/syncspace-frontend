@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import { useAssignTask, useTask, useUpdateTaskStatus } from '../hooks/useTasks';
+import { useWorkspaceMembers } from '../hooks/useWorkspaceMembers';
 import { TaskStatus } from '../types/task';
+import { getErrorMessage } from '../utils/error';
 import './TaskDetailsPage.css';
 
 const TaskDetailsPage = () => {
@@ -10,10 +12,11 @@ const TaskDetailsPage = () => {
   const [assigneeId, setAssigneeId] = useState('');
 
   const taskQuery = useTask(id);
+  const membersQuery = useWorkspaceMembers(taskQuery.data?.workspaceId ?? '');
   const updateStatus = useUpdateTaskStatus();
   const assignTask = useAssignTask();
 
-  if (taskQuery.isLoading) {
+  if (taskQuery.isLoading || membersQuery.isLoading) {
     return <LoadingSpinner />;
   }
 
@@ -46,12 +49,21 @@ const TaskDetailsPage = () => {
 
       <article className="card">
         <h3>Assign User</h3>
+        {(membersQuery.error || assignTask.error) && (
+          <p className="error">{getErrorMessage(membersQuery.error || assignTask.error)}</p>
+        )}
         <div className="row">
-          <input
+          <select
             value={assigneeId}
             onChange={(event) => setAssigneeId(event.target.value)}
-            placeholder="Assignee UUID"
-          />
+          >
+            <option value="">Select member</option>
+            {membersQuery.data?.map((member) => (
+              <option key={member.id} value={member.userId}>
+                {member.displayName || member.email || member.userId}
+              </option>
+            ))}
+          </select>
           <button
             onClick={() => assignTask.mutate({ taskId: task.id, payload: { assigneeId } })}
             disabled={assignTask.isPending || !assigneeId}

@@ -22,6 +22,11 @@ export const workspaceSchema = z.object({
   description: z.string().max(1000).optional(),
 });
 
+export const addWorkspaceMemberSchema = z.object({
+  email: z.string().email('Enter a valid email'),
+  role: z.enum(['ADMIN', 'MEMBER']),
+});
+
 export const projectSchema = z.object({
   name: z.string().min(2, 'Name is required').max(120),
   description: z.string().max(1000).optional(),

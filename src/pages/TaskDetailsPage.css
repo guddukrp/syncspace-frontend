@@ -21,7 +21,8 @@
 }
 
 .row button,
-.row input {
+.row input,
+.row select {
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   padding: 0.45rem 0.7rem;
@@ -38,6 +39,15 @@
   border-color: #1d4ed8;
 }
 
-.row input {
+.row input,
+.row select {
   min-width: 320px;
+}
+
+.row select {
+  background: white;
+}
+
+.error {
+  color: #b91c1c;
 }
