@@ -16,7 +16,9 @@ const Modal = ({ title, open, onClose, children }: ModalProps) => {
       <div className="modal-content" onClick={(event) => event.stopPropagation()}>
         <div className="modal-header">
           <h3>{title}</h3>
-          <button onClick={onClose}>x</button>
+          <button aria-label="Close" onClick={onClose}>
+            x
+          </button>
         </div>
         {children}
       </div>

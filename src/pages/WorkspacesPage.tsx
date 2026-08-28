@@ -6,7 +6,7 @@ import { z } from 'zod';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import Modal from '../components/common/Modal';
 import Pagination from '../components/common/Pagination';
-import { APP_ROUTES } from '../constant';
+import { APP_ROUTES } from '../constants/routes';
 import { useCreateWorkspace, useDeleteWorkspace, useWorkspaces } from '../hooks/useWorkspaces';
 import { getErrorMessage } from '../utils/error';
 import { sanitizePage } from '../utils/pagination';
@@ -51,25 +51,35 @@ const WorkspacesPage = () => {
   }
 
   return (
-    <section className="workspaces-page">
-      <header>
-        <h1>Workspaces</h1>
-        <button onClick={() => setModalOpen(true)}>Create Workspace</button>
+    <section className="workspaces-page page-shell">
+      <header className="page-heading">
+        <div>
+          <h1>Workspaces</h1>
+          <p>Create team spaces, invite members, and organize projects.</p>
+        </div>
+        <button className="primary-button" onClick={() => setModalOpen(true)}>
+          New Workspace
+        </button>
       </header>
 
       {errorText && <p className="error">{errorText}</p>}
 
+      <div className="workspace-toolbar">
+        <input className="field" type="search" placeholder="Search workspaces..." />
+      </div>
+
       <ul className="workspace-list">
         {workspacesQuery.data?.content.map((workspace) => (
-          <li key={workspace.id}>
+          <li className="surface-card" key={workspace.id}>
             <div>
+              <span className="workspace-avatar">{workspace.name.charAt(0).toUpperCase()}</span>
               <Link to={APP_ROUTES.workspaceDetails(workspace.id)}>
                 <h3>{workspace.name}</h3>
               </Link>
-              <p>{workspace.description || 'No description'}</p>
+              <p>{workspace.description || 'Updated recently'}</p>
             </div>
             <button
-              className="delete-btn"
+              className="danger-button"
               onClick={() => deleteWorkspace.mutate(workspace.id)}
               disabled={deleteWorkspace.isPending}
             >
@@ -90,15 +100,15 @@ const WorkspacesPage = () => {
         <form className="create-form" onSubmit={handleSubmit(submitWorkspace)}>
           <label>
             Name
-            <input {...register('name')} />
+            <input className="field" {...register('name')} />
             {errors.name && <small className="error">{errors.name.message}</small>}
           </label>
           <label>
             Description
-            <textarea rows={3} {...register('description')} />
+            <textarea className="textarea-field" rows={3} {...register('description')} />
             {errors.description && <small className="error">{errors.description.message}</small>}
           </label>
-          <button type="submit" disabled={createWorkspace.isPending}>
+          <button className="primary-button" type="submit" disabled={createWorkspace.isPending}>
             {createWorkspace.isPending ? 'Creating...' : 'Create'}
           </button>
         </form>

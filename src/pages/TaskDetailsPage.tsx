@@ -27,12 +27,19 @@ const TaskDetailsPage = () => {
   const task = taskQuery.data;
 
   return (
-    <section className="task-details-page">
-      <h1>{task.title}</h1>
-      <p>{task.description || 'No description'}</p>
+    <section className="task-details-page page-shell">
+      <header className="page-heading">
+        <div>
+          <h1>{task.title}</h1>
+          <p>{task.description || 'No description'}</p>
+        </div>
+        <span className={`status-badge status-${task.status.toLowerCase()}`}>{task.status}</span>
+      </header>
 
-      <article className="card">
-        <h3>Status</h3>
+      <article className="surface-card card">
+        <div className="panel-title">
+          <h3>Status</h3>
+        </div>
         <div className="row">
           {(['TODO', 'IN_PROGRESS', 'DONE', 'BLOCKED'] as TaskStatus[]).map((status) => (
             <button
@@ -47,13 +54,16 @@ const TaskDetailsPage = () => {
         </div>
       </article>
 
-      <article className="card">
-        <h3>Assign User</h3>
+      <article className="surface-card card">
+        <div className="panel-title">
+          <h3>Assign User</h3>
+        </div>
         {(membersQuery.error || assignTask.error) && (
           <p className="error">{getErrorMessage(membersQuery.error || assignTask.error)}</p>
         )}
         <div className="row">
           <select
+            className="select-field"
             value={assigneeId}
             onChange={(event) => setAssigneeId(event.target.value)}
           >
@@ -65,13 +75,14 @@ const TaskDetailsPage = () => {
             ))}
           </select>
           <button
+            className="primary-button"
             onClick={() => assignTask.mutate({ taskId: task.id, payload: { assigneeId } })}
             disabled={assignTask.isPending || !assigneeId}
           >
             {assignTask.isPending ? 'Assigning...' : 'Assign'}
           </button>
         </div>
-        {task.assigneeId && <small>Current assignee: {task.assigneeId}</small>}
+        {task.assigneeId && <small className="muted-note">Current assignee selected</small>}
       </article>
     </section>
   );

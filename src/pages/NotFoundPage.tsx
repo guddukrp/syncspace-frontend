@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { APP_ROUTES } from '../constant';
+import { APP_ROUTES } from '../constants/routes';
 import './NotFoundPage.css';
 
 const NotFoundPage = () => {

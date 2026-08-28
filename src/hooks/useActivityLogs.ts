@@ -1,19 +1,13 @@
-import { useQuery } from '@tanstack/react-query';
-import { QUERY_KEYS } from '../constant';
-import { activityLogService } from '../services/activityLogService';
+import { skipToken } from '@reduxjs/toolkit/query';
+import {
+  useListProjectActivityLogsQuery,
+  useListWorkspaceActivityLogsQuery,
+} from '../store/api/apiSlice';
 
 export const useWorkspaceActivityLogs = (workspaceId: string) => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.activityLogs, 'workspace', workspaceId],
-    queryFn: () => activityLogService.listByWorkspace(workspaceId),
-    enabled: Boolean(workspaceId),
-  });
+  return useListWorkspaceActivityLogsQuery(workspaceId || skipToken);
 };
 
 export const useProjectActivityLogs = (projectId: string) => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.activityLogs, 'project', projectId],
-    queryFn: () => activityLogService.listByProject(projectId),
-    enabled: Boolean(projectId),
-  });
+  return useListProjectActivityLogsQuery(projectId || skipToken);
 };

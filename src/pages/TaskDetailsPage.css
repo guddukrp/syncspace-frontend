@@ -1,17 +1,18 @@
 .task-details-page {
-  display: grid;
-  gap: 1rem;
-}
-
-.task-details-page h1 {
-  margin: 0;
+  max-width: 880px;
 }
 
 .card {
-  background: white;
-  border: 1px solid #dbe3ef;
-  border-radius: 12px;
   padding: 1rem;
+}
+
+.panel-title {
+  margin-bottom: 0.85rem;
+}
+
+.panel-title h3 {
+  margin: 0;
+  font-size: 1rem;
 }
 
 .row {
@@ -21,8 +22,7 @@
 }
 
 .row button,
-.row input,
-.row select {
+.row input {
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   padding: 0.45rem 0.7rem;
@@ -34,9 +34,9 @@
 }
 
 .row button.active {
-  background: #1d4ed8;
+  background: var(--primary);
   color: white;
-  border-color: #1d4ed8;
+  border-color: var(--primary);
 }
 
 .row input,
@@ -48,6 +48,8 @@
   background: white;
 }
 
-.error {
-  color: #b91c1c;
+.muted-note {
+  display: block;
+  margin-top: 0.7rem;
+  color: var(--muted);
 }
