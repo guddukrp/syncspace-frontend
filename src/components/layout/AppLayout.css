@@ -1,16 +1,18 @@
 .app-layout {
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: 224px 1fr;
   min-height: 100vh;
 }
 
 .app-shell {
   display: grid;
   grid-template-rows: 72px 1fr;
+  min-width: 0;
 }
 
 .content {
-  padding: 1.25rem;
+  min-width: 0;
+  padding: 1.5rem 1.7rem;
 }
 
 @media (max-width: 900px) {

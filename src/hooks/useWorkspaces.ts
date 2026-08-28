@@ -1,41 +1,42 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEYS } from '../constant';
-import { workspaceService } from '../services/workspaceService';
+import { skipToken } from '@reduxjs/toolkit/query';
+import {
+  useCreateWorkspaceMutation,
+  useDeleteWorkspaceMutation,
+  useGetWorkspaceQuery,
+  useListWorkspacesQuery,
+} from '../store/api/apiSlice';
 import { CreateWorkspacePayload } from '../types/workspace';
 
 export const useWorkspaces = (page: number, size: number) => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.workspaces, page, size],
-    queryFn: () => workspaceService.list({ page, size }),
-  });
+  return useListWorkspacesQuery({ page, size });
 };
 
 export const useWorkspace = (id: string) => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.workspace, id],
-    queryFn: () => workspaceService.getById(id),
-    enabled: Boolean(id),
-  });
+  return useGetWorkspaceQuery(id || skipToken);
 };
 
 export const useCreateWorkspace = () => {
-  const queryClient = useQueryClient();
+  const [createWorkspace, result] = useCreateWorkspaceMutation();
 
-  return useMutation({
-    mutationFn: (payload: CreateWorkspacePayload) => workspaceService.create(payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.workspaces] });
+  return {
+    ...result,
+    isPending: result.isLoading,
+    mutate: (payload: CreateWorkspacePayload) => {
+      void createWorkspace(payload);
     },
-  });
+    mutateAsync: (payload: CreateWorkspacePayload) => createWorkspace(payload).unwrap(),
+  };
 };
 
 export const useDeleteWorkspace = () => {
-  const queryClient = useQueryClient();
+  const [deleteWorkspace, result] = useDeleteWorkspaceMutation();
 
-  return useMutation({
-    mutationFn: (workspaceId: string) => workspaceService.remove(workspaceId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.workspaces] });
+  return {
+    ...result,
+    isPending: result.isLoading,
+    mutate: (workspaceId: string) => {
+      void deleteWorkspace(workspaceId);
     },
-  });
+    mutateAsync: (workspaceId: string) => deleteWorkspace(workspaceId).unwrap(),
+  };
 };

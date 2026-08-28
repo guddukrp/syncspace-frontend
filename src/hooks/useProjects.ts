@@ -1,23 +1,28 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEYS } from '../constant';
-import { projectService } from '../services/projectService';
+import { skipToken } from '@reduxjs/toolkit/query';
+import {
+  useCreateProjectMutation,
+  useListProjectsQuery,
+  useListWorkspaceProjectsQuery,
+} from '../store/api/apiSlice';
 import { CreateProjectPayload } from '../types/project';
 
+export const useAllProjects = (page: number, size: number) => {
+  return useListProjectsQuery({ page, size });
+};
+
 export const useProjects = (workspaceId: string, page: number, size: number) => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.projects, workspaceId, page, size],
-    queryFn: () => projectService.listByWorkspace(workspaceId, { page, size }),
-    enabled: Boolean(workspaceId),
-  });
+  return useListWorkspaceProjectsQuery(workspaceId ? { workspaceId, params: { page, size } } : skipToken);
 };
 
 export const useCreateProject = (workspaceId: string) => {
-  const queryClient = useQueryClient();
+  const [createProject, result] = useCreateProjectMutation();
 
-  return useMutation({
-    mutationFn: (payload: CreateProjectPayload) => projectService.create(workspaceId, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.projects, workspaceId] });
+  return {
+    ...result,
+    isPending: result.isLoading,
+    mutate: (payload: CreateProjectPayload) => {
+      void createProject({ workspaceId, payload });
     },
-  });
+    mutateAsync: (payload: CreateProjectPayload) => createProject({ workspaceId, payload }).unwrap(),
+  };
 };

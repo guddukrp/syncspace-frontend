@@ -1,3 +1,4 @@
+import { FiBell, FiHelpCircle, FiLogOut, FiSearch } from 'react-icons/fi';
 import { useAuth } from '../../hooks/useAuth';
 import './Header.css';
 
@@ -6,14 +7,29 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div>
-        <h2>Syncspace</h2>
-        <small>Team productivity workspace</small>
-      </div>
+      <label className="header-search">
+        <FiSearch />
+        <span>Search</span>
+        <input type="search" placeholder="Search anything..." />
+      </label>
       <div className="header-right">
-        <span>{user?.email || 'Unknown user'}</span>
-        <span className="role">{user?.role}</span>
-        <button onClick={logout}>Logout</button>
+        <button className="header-icon" aria-label="Notifications">
+          <FiBell />
+        </button>
+        <button className="header-icon" aria-label="Help">
+          <FiHelpCircle />
+        </button>
+        <div className="profile-chip">
+          <span>{user?.displayName?.charAt(0).toUpperCase() || 'U'}</span>
+          <div>
+            <strong>{user?.displayName || 'User'}</strong>
+            <small>{user?.email || 'Signed in'}</small>
+          </div>
+        </div>
+        <button className="ghost-button logout-button" onClick={logout}>
+          <FiLogOut />
+          Logout
+        </button>
       </div>
     </header>
   );

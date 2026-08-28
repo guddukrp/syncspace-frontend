@@ -1,8 +1,16 @@
-import axios from 'axios';
+type ErrorResponse = {
+  data?: {
+    message?: string;
+  };
+  error?: string;
+  message?: string;
+  status?: number | string;
+};
 
 export const getErrorMessage = (error: unknown): string => {
-  if (axios.isAxiosError(error)) {
-    return error.response?.data?.message || error.message || 'Network error';
+  if (error && typeof error === 'object') {
+    const response = error as ErrorResponse;
+    return response.data?.message || response.message || response.error || 'Network error';
   }
 
   if (error instanceof Error) {

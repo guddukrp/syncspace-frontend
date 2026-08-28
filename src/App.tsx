@@ -1,12 +1,13 @@
 import { Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import AppLayout from './components/layout/AppLayout';
-import { APP_ROUTES } from './constant';
+import { APP_ROUTES } from './constants/routes';
 import { useAuth } from './hooks/useAuth';
 import DashboardPage from './pages/DashboardPage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ProjectDetailsPage from './pages/ProjectDetailsPage';
+import ProjectsPage from './pages/ProjectsPage';
 import RegisterPage from './pages/RegisterPage';
 import TaskDetailsPage from './pages/TaskDetailsPage';
 import WorkspaceDetailsPage from './pages/WorkspaceDetailsPage';
@@ -33,6 +34,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route path={APP_ROUTES.dashboard} element={<DashboardPage />} />
+            <Route path={APP_ROUTES.projects} element={<ProjectsPage />} />
             <Route path={APP_ROUTES.workspaces} element={<WorkspacesPage />} />
             <Route path="/workspaces/:id" element={<WorkspaceDetailsPage />} />
             <Route path="/projects/:id" element={<ProjectDetailsPage />} />

@@ -18,10 +18,7 @@ export interface RegisterPayload {
   password: string;
 }
 
-export interface AuthContextType {
-  token: string | null;
-  user: AuthUser | null;
-  isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+export interface AuthResult {
+  token: string;
+  user: AuthUser;
 }

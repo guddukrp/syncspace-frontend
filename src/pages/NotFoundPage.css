@@ -4,6 +4,7 @@
   place-items: center;
   text-align: center;
   gap: 0.5rem;
+  background: var(--app-bg);
 }
 
 .not-found-page h1 {
@@ -12,6 +13,6 @@
 }
 
 .not-found-page a {
-  color: #1d4ed8;
+  color: var(--primary);
   font-weight: 600;
 }

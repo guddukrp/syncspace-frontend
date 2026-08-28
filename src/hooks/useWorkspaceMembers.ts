@@ -1,52 +1,64 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEYS } from '../constant';
-import { workspaceMemberService } from '../services/workspaceMemberService';
+import { skipToken } from '@reduxjs/toolkit/query';
+import {
+  useAddWorkspaceMemberMutation,
+  useListWorkspaceMembersQuery,
+  useRemoveWorkspaceMemberMutation,
+  useUpdateWorkspaceMemberRoleMutation,
+} from '../store/api/apiSlice';
 import { AddWorkspaceMemberPayload, UpdateWorkspaceMemberRolePayload } from '../types/workspace';
 
 export const useWorkspaceMembers = (workspaceId: string) => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.workspaceMembers, workspaceId],
-    queryFn: () => workspaceMemberService.list(workspaceId),
-    enabled: Boolean(workspaceId),
-  });
+  return useListWorkspaceMembersQuery(workspaceId || skipToken);
 };
 
 export const useAddWorkspaceMember = (workspaceId: string) => {
-  const queryClient = useQueryClient();
+  const [addWorkspaceMember, result] = useAddWorkspaceMemberMutation();
 
-  return useMutation({
-    mutationFn: (payload: AddWorkspaceMemberPayload) =>
-      workspaceMemberService.add(workspaceId, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.workspaceMembers, workspaceId] });
+  return {
+    ...result,
+    isPending: result.isLoading,
+    mutate: (payload: AddWorkspaceMemberPayload) => {
+      void addWorkspaceMember({ workspaceId, payload });
     },
-  });
+    mutateAsync: (payload: AddWorkspaceMemberPayload) =>
+      addWorkspaceMember({ workspaceId, payload }).unwrap(),
+  };
 };
 
 export const useUpdateWorkspaceMemberRole = (workspaceId: string) => {
-  const queryClient = useQueryClient();
+  const [updateWorkspaceMemberRole, result] = useUpdateWorkspaceMemberRoleMutation();
 
-  return useMutation({
-    mutationFn: ({
+  return {
+    ...result,
+    isPending: result.isLoading,
+    mutate: ({
       memberId,
       payload,
     }: {
       memberId: string;
       payload: UpdateWorkspaceMemberRolePayload;
-    }) => workspaceMemberService.updateRole(workspaceId, memberId, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.workspaceMembers, workspaceId] });
+    }) => {
+      void updateWorkspaceMemberRole({ workspaceId, memberId, payload });
     },
-  });
+    mutateAsync: ({
+      memberId,
+      payload,
+    }: {
+      memberId: string;
+      payload: UpdateWorkspaceMemberRolePayload;
+    }) => updateWorkspaceMemberRole({ workspaceId, memberId, payload }).unwrap(),
+  };
 };
 
 export const useRemoveWorkspaceMember = (workspaceId: string) => {
-  const queryClient = useQueryClient();
+  const [removeWorkspaceMember, result] = useRemoveWorkspaceMemberMutation();
 
-  return useMutation({
-    mutationFn: (memberId: string) => workspaceMemberService.remove(workspaceId, memberId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.workspaceMembers, workspaceId] });
+  return {
+    ...result,
+    isPending: result.isLoading,
+    mutate: (memberId: string) => {
+      void removeWorkspaceMember({ workspaceId, memberId });
     },
-  });
+    mutateAsync: (memberId: string) => removeWorkspaceMember({ workspaceId, memberId }).unwrap(),
+  };
 };

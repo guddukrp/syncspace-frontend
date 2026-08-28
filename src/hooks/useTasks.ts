@@ -1,53 +1,57 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEYS } from '../constant';
-import { taskService } from '../services/taskService';
+import { skipToken } from '@reduxjs/toolkit/query';
+import {
+  useAssignTaskMutation,
+  useCreateTaskMutation,
+  useGetTaskQuery,
+  useListTasksQuery,
+  useUpdateTaskStatusMutation,
+} from '../store/api/apiSlice';
 import { AssignTaskPayload, CreateTaskPayload, TaskStatus, UpdateTaskStatusPayload } from '../types/task';
 
 export const useTasks = (page: number, size: number, status?: TaskStatus) => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.tasks, page, size, status],
-    queryFn: () => taskService.list({ page, size, status }),
-  });
+  return useListTasksQuery({ page, size, status });
 };
 
 export const useTask = (id: string) => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.task, id],
-    queryFn: () => taskService.getById(id),
-    enabled: Boolean(id),
-  });
+  return useGetTaskQuery(id || skipToken);
 };
 
 export const useCreateTask = (projectId: string) => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (payload: CreateTaskPayload) => taskService.create(projectId, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.tasks] });
+  const [createTask, result] = useCreateTaskMutation();
+
+  return {
+    ...result,
+    isPending: result.isLoading,
+    mutate: (payload: CreateTaskPayload) => {
+      void createTask({ projectId, payload });
     },
-  });
+    mutateAsync: (payload: CreateTaskPayload) => createTask({ projectId, payload }).unwrap(),
+  };
 };
 
 export const useUpdateTaskStatus = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ taskId, payload }: { taskId: string; payload: UpdateTaskStatusPayload }) =>
-      taskService.updateStatus(taskId, payload),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.task, variables.taskId] });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.tasks] });
+  const [updateTaskStatus, result] = useUpdateTaskStatusMutation();
+
+  return {
+    ...result,
+    isPending: result.isLoading,
+    mutate: (variables: { taskId: string; payload: UpdateTaskStatusPayload }) => {
+      void updateTaskStatus(variables);
     },
-  });
+    mutateAsync: (variables: { taskId: string; payload: UpdateTaskStatusPayload }) =>
+      updateTaskStatus(variables).unwrap(),
+  };
 };
 
 export const useAssignTask = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ taskId, payload }: { taskId: string; payload: AssignTaskPayload }) =>
-      taskService.assign(taskId, payload),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.task, variables.taskId] });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.tasks] });
+  const [assignTask, result] = useAssignTaskMutation();
+
+  return {
+    ...result,
+    isPending: result.isLoading,
+    mutate: (variables: { taskId: string; payload: AssignTaskPayload }) => {
+      void assignTask(variables);
     },
-  });
+    mutateAsync: (variables: { taskId: string; payload: AssignTaskPayload }) => assignTask(variables).unwrap(),
+  };
 };
